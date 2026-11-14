@@ -2,3 +2,6 @@
 __pycache__/
 .ipynb_checkpoints/
 *.pyc
+
+# Kaggle 数据文件不提交到 GitHub（请按 README 自行下载）
+data/*.csv

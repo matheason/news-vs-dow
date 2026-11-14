@@ -11,7 +11,21 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 ```
-Put the Kaggle files `Combined_News_DJIA.csv` and `DJIA_table.csv` in `data/`, then open `notebooks/main.ipynb`.
+## Data (not included in this repo)
+The dataset files are **not** committed to GitHub. To reproduce the results:
+
+1. Download the dataset **Daily News for Stock Market Prediction** (by Aaron7sun) from Kaggle:
+   https://www.kaggle.com/datasets/aaron7sun/stocknews
+2. Unzip it and copy these two files into the `data/` folder at the project root:
+   ```
+   news-vs-dow/
+   └── data/
+       ├── Combined_News_DJIA.csv
+       └── DJIA_table.csv
+   ```
+3. Open `notebooks/main.ipynb` and run all cells.
+
+You don't need the data just to read the results: the notebook is saved with all of its outputs.
 
 ## Layout
 - `notebooks/main.ipynb` — main analysis (saved with outputs)
