@@ -1,4 +1,4 @@
-# 阶段 1 依赖（后续阶段会继续添加）
+# 项目依赖（随阶段增加）
 pandas==3.1.1
 numpy==2.5.4
 scikit-learn==1.9.1
@@ -7,3 +7,4 @@ jupyter==1.1.1
 nbformat==5.11.1
 nbconvert==7.17.2
 ipykernel==7.4.0
+nltk==3.10.4

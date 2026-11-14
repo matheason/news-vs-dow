@@ -11,6 +11,11 @@
 - scikit-learn — https://scikit-learn.org/
 - Matplotlib — https://matplotlib.org/
 - Jupyter / nbformat / nbconvert — https://jupyter.org/
+- NLTK — https://www.nltk.org/
+
+## Pretrained models / lexicons
+- **VADER** sentiment lexicon and rules, via NLTK (`vader_lexicon`) — https://github.com/cjhutto/vaderSentiment
+  Hutto, C.J. & Gilbert, E. (2014). *VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text.* ICWSM. https://ojs.aaai.org/index.php/ICWSM/article/view/14550
 
 ## AI tools
 - **Claude Code (Claude Opus 5.5, Anthropic)** — https://claude.com/claude-code
