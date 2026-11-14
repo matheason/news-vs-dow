@@ -21,8 +21,9 @@ The dataset files are **not** committed to GitHub. To reproduce the results:
    news-vs-dow/
    └── data/
        ├── Combined_News_DJIA.csv
-       └── DJIA_table.csv
+       └── upload_DJIA_table.csv   (DJIA_table.csv also works)
    ```
+   The third file in the download, `RedditNews.csv`, is not used.
 3. Open `notebooks/main.ipynb` and run all cells.
 
 You don't need the data just to read the results: the notebook is saved with all of its outputs.
