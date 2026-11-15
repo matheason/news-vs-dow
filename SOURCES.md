@@ -12,10 +12,14 @@
 - Matplotlib — https://matplotlib.org/
 - Jupyter / nbformat / nbconvert — https://jupyter.org/
 - NLTK — https://www.nltk.org/
+- PyTorch — https://pytorch.org/
+- Hugging Face Transformers — https://huggingface.co/docs/transformers
 
 ## Pretrained models / lexicons
 - **VADER** sentiment lexicon and rules, via NLTK (`vader_lexicon`) — https://github.com/cjhutto/vaderSentiment
   Hutto, C.J. & Gilbert, E. (2014). *VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text.* ICWSM. https://ojs.aaai.org/index.php/ICWSM/article/view/14550
+- **FinBERT** (`ProsusAI/finbert`), via Hugging Face — https://huggingface.co/ProsusAI/finbert
+  Araci, D. (2019). *FinBERT: Financial Sentiment Analysis with Pre-trained Language Models.* arXiv:1908.10063. https://arxiv.org/abs/1908.10063
 
 ## AI tools
 - **Claude Code (Claude Opus 5.5, Anthropic)** — https://claude.com/claude-code

@@ -24,8 +24,11 @@ def vader_scores(news):
     return news[HEADLINE_COLS].apply(lambda col: col.map(score))
 
 
-def daily_features(scores, prefix):
+def daily_features(scores, prefix, is_neg=None, is_pos=None):
     """把一天 25 个分数汇总成几个数字（一行 = 一天）。
+
+    is_neg / is_pos：和 scores 同形状的 True/False 表，说明哪些标题算负面/正面。
+    不传时用 VADER 的阈值（±0.05）；FinBERT 则传"概率最大的类别"。
 
     - mean：整体情绪
     - min / max：最坏、最好的那条新闻（一条大坏消息可能比平均更重要）
@@ -33,13 +36,17 @@ def daily_features(scores, prefix):
     - neg_share / pos_share：负面、正面标题占比
     - top1：排名第一（最热门）那条标题的情绪
     """
+    if is_neg is None:
+        is_neg = scores <= NEG_THRESHOLD
+    if is_pos is None:
+        is_pos = scores >= POS_THRESHOLD
     valid = scores.notna().sum(axis=1)
     return pd.DataFrame({
         f"{prefix}_mean": scores.mean(axis=1),
         f"{prefix}_min": scores.min(axis=1),
         f"{prefix}_max": scores.max(axis=1),
         f"{prefix}_std": scores.std(axis=1),
-        f"{prefix}_neg_share": (scores <= NEG_THRESHOLD).sum(axis=1) / valid,
-        f"{prefix}_pos_share": (scores >= POS_THRESHOLD).sum(axis=1) / valid,
+        f"{prefix}_neg_share": is_neg.sum(axis=1) / valid,
+        f"{prefix}_pos_share": is_pos.sum(axis=1) / valid,
         f"{prefix}_top1": scores["Top1"].fillna(0.0),
     })

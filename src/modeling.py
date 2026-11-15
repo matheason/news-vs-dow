@@ -48,3 +48,30 @@ def cv_table(search):
 def always_up_cv_accuracy(y_train):
     """同样的 5 个验证折上，"永远预测涨"能拿多少准确率——模型在训练集内部也得先赢它。"""
     return [float(y_train[val].mean()) for _, val in CV.split(y_train)]
+
+
+def run_experiment(data, feat_cols, label_col="Label", name="模型"):
+    """一次完整实验：按日期切分 → 训练集内调参 → 测试集只评估一次。
+
+    data：每行一天，含 Date、特征列、目标列。返回一行结果（dict）和训练好的搜索对象。
+    阶段 3、4 要用不同特征 / 不同目标重复同一流程，所以包成一个函数，保证每次做法完全一样。
+    """
+    from src.data_utils import split_by_date
+    from src.evaluation import evaluate
+
+    train, test = split_by_date(data)
+    X_train, y_train = train[feat_cols].to_numpy(), train[label_col].to_numpy().astype(int)
+    X_test, y_test = test[feat_cols].to_numpy(), test[label_col].to_numpy().astype(int)
+
+    search = tune(make_logreg(), LOGREG_GRID, X_train, y_train)
+    pred = search.best_estimator_.predict(X_test)
+    row = evaluate(y_test, pred, name)
+    row.update({
+        "cv_accuracy": search.best_score_,
+        "cv_always_up": sum(always_up_cv_accuracy(y_train)) / CV.n_splits,
+        "test_always_up": y_test.mean(),
+        "pred_up_share": pred.mean(),
+        "best_C": search.best_params_["logisticregression__C"],
+        "class_weight": str(search.best_params_["logisticregression__class_weight"]),
+    })
+    return row, search
