@@ -15,6 +15,9 @@ def _load_model():
     # 放在函数里 import：有缓存时根本不用加载 torch，notebook 打开更快
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from transformers.utils import logging as hf_logging
+
+    hf_logging.disable_progress_bar()  # 不显示"Loading weights"进度条，notebook 输出更干净
 
     torch.manual_seed(42)
     # 有 NVIDIA 显卡（比如 Colab 的 GPU）就用 GPU，没有就用 CPU；结果只有极小的浮点差异

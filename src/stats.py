@@ -53,3 +53,30 @@ def accuracy_vs_chance(y_true, pred, p0=0.5):
     """准确率是否显著高于 p0（默认 50%）：单侧精确二项检验。"""
     k = int(np.sum(np.asarray(pred) == np.asarray(y_true)))
     return {"correct": k, "n": len(y_true), "p_value": binomtest(k, len(y_true), p0, alternative="greater").pvalue}
+
+
+def _abs_corr(X, y):
+    """X 每一列和 y 的相关系数绝对值（一次算完所有列）。"""
+    Xz = (X - X.mean(axis=0)) / X.std(axis=0)
+    yz = (y - y.mean()) / y.std()
+    return np.abs(Xz.T @ yz) / len(y)
+
+
+def permutation_max_corr(X, y, n_perm=5000, seed=SEED):
+    """置换检验：特征和目标之间"最强的那个相关系数"，是不是比纯随机更强？
+
+    做法：把 y（涨跌）随机打乱 n_perm 次，打乱后涨跌和新闻毫无关系，记下每次"所有特征里最大的 |r|"。
+    - p_single：只看最强那个特征、假装事先就只检验它时的 p 值（会偏乐观）
+    - p_max：和"打乱后的最大 |r|"比较的 p 值——自动考虑了"同时看了很多特征、挑了最好的"这件事
+    """
+    rng = np.random.default_rng(seed)
+    X, y = np.asarray(X, dtype=float), np.asarray(y, dtype=float)
+    real = _abs_corr(X, y)
+    best = int(real.argmax())
+    null = np.array([_abs_corr(X, rng.permutation(y)) for _ in range(n_perm)])
+    return {
+        "best_feature": best,
+        "abs_r": float(real[best]),
+        "p_single": float((null[:, best] >= real[best]).mean()),
+        "p_max": float((null.max(axis=1) >= real[best]).mean()),
+    }

@@ -90,3 +90,12 @@ def baseline_previous_day(train, test):
     prev = test["Label"].shift(1)
     prev.iloc[0] = train["Label"].iloc[-1]
     return prev.astype(int).to_numpy()
+
+
+# 阶段 3.4 / 4.1 用：判断一条标题是不是在"报道股市行情"，以及说的是涨还是跌。
+# (?:...) 是"不捕获"的分组，只用来把几个写法放在一起。
+MARKET_WORDS = r"\b(?:stocks?|stock markets?|dow|wall street|s&p|nasdaq|shares)\b"
+DOWN_WORDS = (r"\b(?:plunge[sd]?|crash(?:es|ed)?|tumble[sd]?|fall(?:s|en)?|fell|slump(?:s|ed)?"
+              r"|sink[s]?|sank|drop(?:s|ped)?|lose[s]?|lost|sell-?off)\b")
+UP_WORDS = (r"\b(?:rall(?:y|ies|ied)|surge[sd]?|soar(?:s|ed)?|jump(?:s|ed)?|rise[sn]?|rose"
+            r"|gain(?:s|ed)?|climb(?:s|ed)?|rebound(?:s|ed)?)\b")

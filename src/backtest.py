@@ -27,14 +27,16 @@ def daily_returns(djia, kind):
     return pd.DataFrame({"Date": djia["Date"], "ret": r})
 
 
-def run_strategy(signal, ret, cost=0.0005):
-    """signal：每天 1（持有）或 0（空仓）；ret：对应日子的道指收益率。cost：每次换仓的成本（默认 0.05%）。
+def run_strategy(signal, ret, cost=0.0005, intraday=False):
+    """signal：每天 1（持有）或 0（空仓）；ret：对应日子的道指收益率。cost：每笔买或卖的成本（默认 0.05%）。
 
-    返回每天的策略收益（已扣成本）。第一天从空仓开始，所以第一天如果持有也算一次换仓。
+    - intraday=False（收盘到收盘）：只有仓位变化时才交易。第一天从空仓开始，第一天持有也算一次买入。
+    - intraday=True（开盘买、收盘卖）：每个持有日都是一买一卖，扣两次成本。
+    返回每天的策略收益（已扣成本）。
     """
     signal = np.asarray(signal, dtype=float)
     ret = np.asarray(ret, dtype=float)
-    trades = np.abs(np.diff(signal, prepend=0.0))
+    trades = 2 * signal if intraday else np.abs(np.diff(signal, prepend=0.0))
     return signal * ret - trades * cost
 
 
